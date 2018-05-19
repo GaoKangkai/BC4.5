@@ -1,3 +1,17 @@
+[A,B,C,D,E] = textread('iris.data','%f%f%f%f%s','delimiter',',');
+%patterns=[A,B,C,D];
+Group=unique(E);
+targets=zeros(size(E));
+for i=1:size(E,1) %将string类标转换成数字类标
+    if isequal(E(i),Group(1))
+        targets(i)=1;
+    elseif isequal(E(i),Group(2))
+        targets(i)=2;
+    elseif isequal(E(i),Group(3))
+        targets(i)=3;
+    end
+end
+%{
 traindata=[5    3   1.6 0.2 1  
 5   3.4 1.6 0.4 1  
 5.2 3.5 1.5 0.2 1  
@@ -149,7 +163,16 @@ testdata=[5.1   3.5 1.4 0.2 1
 7.7 2.8 6.7 2   3  
 6.3 2.7 4.9 1.8 3  
 6.7 3.3 5.7 2.1 3  
-];  
+]; 
+%}
+inputdata=[A,B,C,D,targets];
+indices = crossvalind('Kfold',size(inputdata,1),10);
+for i = 1:10
+    test = (indices == i); train = ~test;
+    
+end
+%traindata=inputdata;
+%testdata=inputdata;
 train_patterns=traindata(:,1:(size(traindata,2)-1));  
 train_targets=traindata(:,size(traindata,2))';  
 test_patterns=testdata(:,1:(size(testdata,2)-1));  
